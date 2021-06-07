@@ -1,0 +1,62 @@
+{% extends 'orders/base.html' %}
+{% block title %}Login {% endblock title %}
+
+
+{% block body %}
+
+<br>
+
+<div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show my-0" role="alert">
+
+                <b>{{ message }}</b>
+        {% endfor %}
+
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+</div>
+    <h1 class="text-center">LOGIN</h1>
+
+<div class="p-3 mb-2 bg-light text-dark">
+
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-7">
+        <div class="col-sm-2000">
+      <div class="mx-auto" style="width: 550px;">
+
+            <label for ="username">
+                <p class="text-dark">Username</p></label>
+            <div class="col-sm-10">
+
+          <input type="text" class="form-control" id="username" name="username" placeholder="Enter The Username:">
+        </div>
+            <br>
+
+            <label  for ="password">
+             <p class="text-dark">Password</p></label>
+        <div class="col-sm-10">
+         <input type="password" class="form-control" id="password" name="password" placeholder="Enter The Password:">
+        </div>
+          <br>
+          <input class="btn btn-primary" type="submit" value="Submit">
+
+           <br>
+        <hr>
+          <a href="">Forgot password?</a>
+
+			<a href="/signup"> Don't have an account?</a>
+
+
+
+</div></div></div>
+
+</form>
+<br>
+<hr>
+
+</div>
+{% endblock body %}

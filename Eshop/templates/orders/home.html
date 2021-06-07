@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    {% load static %}
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+            crossorigin="anonymous"></script>
+    <title>Krishna Store</title>
+    <ul class="nav nav-tabs">
+        <nav class="navbar navbar-dark bg-light">
+            <li class="nav-item">
+
+                <a class="nav-link active" aria-current="page" href="/">Shop</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                   aria-expanded="false">Items</a>
+                <ul class="dropdown-menu">
+                    {% for category in categories %}
+                        <li><a class="dropdown-item" href="/?category={{ category.id }}">
+                            {{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% if request.session.customer %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">logout</a>
+                </li>
+                <li class="nav-item">
+
+                    <div class="container">
+                        <a class="navbar-brand" href="/cart">
+                            <img src="http://www.clker.com/cliparts/5/3/v/F/2/k/small-cart-th.png" alt="" width="30"
+                                 height="24">
+                            <span><b class=" text-info">{{ request.session.cart.keys|length }}</b></span>
+
+                        </a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/signup">Signup</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/loguser">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/aboutus">AboutUs</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact</a>
+                </li>
+
+            {% endif %}
+        </nav>
+    </ul>
+</head>
+
+<body>
+<br>
+<figure class="text-center">
+    <blockquote class="blockquote">
+        <p>Welcome To Krishna Store.</p>
+    </blockquote>
+    <figcaption class="blockquote-footer">
+        Which you Imagine Find Here <cite title="Source Title">For Sure</cite>
+    </figcaption>
+</figure>
+<br>
+
+{% load cart %}
+{% load custom %}
+{#for display message#}
+{% if messages %}
+    <div class="alert alert-success" role="alert">
+        {% for m in messages %}
+            {{ m }}
+        {% endfor %}
+    </div>
+{% endif %}
+{#for show item in cart#}
+
+
+<div class="row row-cols-1 row-cols-md-6 ">
+    {% for i in product %}
+        <div class="col">
+            <div class="card" id={{ i.id }}>
+
+                <img src='/media/{{ i.image }}' class="card-img-top" alt="" height="150" width="20">
+                <div class="card-body">
+                    <h5 class="card-title">{{ i.name }}</h5>
+                    <p class="card-text">{{ i.category }}</p>
+                    <p class="card-text">{{ i.desc }}</p>
+
+                    <p class="card-text">Price:<b>{{ i.price }}</b></p>
+                    <div>
+                        {#                    {{ i | is_in_cart:request.session.cart }}#}
+                        {##}
+                        {% if i|is_in_cart:request.session.cart %}
+                            <div class="card-footer row p-0 m-0 ">
+                                <form action="/#{{ i.id }}" class="col-2" method="post">
+                                    {% csrf_token %}
+                                    <input hidden type="text" name="p_id" value='{{ i.id }}'>
+                                    <input hidden type="text" name="remove" value='True'>
+                                    <input type="submit" value=" - " class=" btn-sm  btn-secondary">
+                                </form>
+                                <div class="text-center col">{{ i|cart_quantity:request.session.cart }}</div>
+                                <form action="/#{{ i.id }}" class="col-2" method="post">
+                                    {% csrf_token %}
+                                    <input hidden type="text" name="p_id" value='{{ i.id }}'>
+                                    <input type="submit" value=" + " class=" btn-sm  btn-secondary">
+                                </form>
+                            </div>
+                        {% else %}
+                            <div>
+                                <form method="post" action="/#{{ i.id }}">
+                                    {% csrf_token %}
+                                    <input hidden type="text" id="p_id" name="p_id" value="{{ i.id }}">
+
+
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+                                        <button type="submit" class="btn btn-light border btn-sm">ADD To Cart</button>
+                                    </div>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+</div>
+
+</body>
+
+
+</html>

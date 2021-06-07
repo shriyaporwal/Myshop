@@ -1,0 +1,61 @@
+{% extends 'orders/Basecart.html' %}
+{% block title %}Cart {% endblock title %}
+{% block body %}
+{% load cart %}
+{% load custom %}
+<br>
+
+<div class="container">
+<div class="text-center text-info" ><h1>Your Cart</h1></div>
+    <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">S.no</th>
+                          <th scope="col">Product Name </th>
+                            <th scope="col">Product Image</th>
+                          <th scope="col">UnitPrice</th>
+                          <th scope="col">Quantity</th>
+                            <th scope="col">ActualPrice</th>
+                        </tr>
+                      </thead>
+  <tbody>
+                {% for product in cart_product %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter  }}</th>
+                          <th scope="row">{{ product.name }}</th>
+                          <td>
+                              <img src='/media/{{ product.image }}' alt="" height ="80" width="80">
+
+                          </td>
+                          <td>{{ product.price|currency }}</td>
+                            <td>{{ product|cart_quantity:request.session.cart }}</td>
+                            <td>{{ product|price_total_with_quantity:request.session.cart|currency }}</td>
+                           </tr>
+                {% endfor %}
+  </tbody>
+
+
+                        <tfoot>
+                                    <th colspan="4">YOUR TOTAL BILL :></th>
+                                    <th>{{ cart_product|total_price:request.session.cart|currency }}</th>
+                            </tfoot>
+
+
+                        </table>
+<hr>
+
+ <div class="m-3 p-3">
+  <div class="btn-group">
+  <a href="/checkout" class="btn btn-outline-info border rounded col-lg-3 float-right" aria-current="page">Checkout</a>
+
+</div>
+
+            </div>
+
+
+</div>
+
+
+
+{% endblock %}
+
